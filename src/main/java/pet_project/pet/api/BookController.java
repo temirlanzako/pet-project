@@ -21,6 +21,7 @@ public class BookController {
 
     @GetMapping(value="{id}")
     public Book getBook(@PathVariable Long id) {
+
         return bookService.getBook(id);
     }
     @PostMapping

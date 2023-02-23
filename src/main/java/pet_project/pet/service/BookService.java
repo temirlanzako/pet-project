@@ -14,6 +14,7 @@ public class BookService {
     private final BookRepository bookRepository;
 
     public List<Book> getBooks() {
+
         return bookRepository.findAll();
     }
     public Book getBook(Long id) {
@@ -32,6 +33,7 @@ public class BookService {
         return false;
     }
     public Book updateBook(Book book) {
-            return bookRepository.save(book);
+
+        return bookRepository.save(book);
     }
 }
