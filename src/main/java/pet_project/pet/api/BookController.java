@@ -2,6 +2,7 @@ package pet_project.pet.api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import pet_project.pet.dto.BookDto;
 import pet_project.pet.model.Book;
 import pet_project.pet.service.BookService;
 
@@ -15,25 +16,27 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping
-    public List<Book> getBooks() {
-        return bookService.getBooks();
+    public List<BookDto> getBooks() {
+        return bookService.getAllBooks();
     }
 
     @GetMapping(value="{id}")
-    public Book getBook(@PathVariable Long id) {
+    public BookDto getBook(@PathVariable Long id) {
 
-        return bookService.getBook(id);
+        return bookService.getOneBook(id);
     }
     @PostMapping
-    public Book addBook(@RequestBody Book book) {
-        return bookService.addBook(book);
+    public BookDto addBook(@RequestBody BookDto bookDto) {
+
+        return bookService.addOneBook(bookDto);
     }
     @DeleteMapping(value = "{id}")
     public boolean deleteBook(@PathVariable Long id) {
          return bookService.deleteBook(id);
     }
     @PutMapping
-    public Book updateBook(@RequestBody Book book) {
-        return bookService.updateBook(book);
+    public BookDto updateBookDto(@RequestBody BookDto bookDto) {
+
+        return bookService.updateBookDto(bookDto);
     }
 }
