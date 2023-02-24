@@ -17,8 +17,8 @@ public class Journal extends BaseEntity {
 
     private Timestamp timestamp;
     private Boolean status;
-    @OneToMany
-    private List<User> userList;
+    @OneToOne
+    private User user;
     @OneToMany
     private List<Book> bookList;
 }
