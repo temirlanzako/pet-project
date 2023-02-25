@@ -36,7 +36,6 @@ public class BookController {
     }
     @PutMapping
     public BookDto updateBookDto(@RequestBody BookDto bookDto) {
-
         return bookService.updateBookDto(bookDto);
     }
 }
