@@ -13,15 +13,11 @@ import java.util.List;
 public interface BookMapper {
 
     @Mapping(source = "nameDto", target = "name")
-/*
-    @Mapping(source = "catalog.categoryDto", target = "catalog.category") // <=== cant see property in CatalogDto
-*/
+    @Mapping(source = "catalogDto.categoryDto", target = "catalog.category")
     Book toEntity(BookDto bookDto);
 
     @Mapping(source = "name", target = "nameDto")
-/*
-    @Mapping(source = "catalog.category", target = "catalog.categoryDto")
-*/
+    @Mapping(source = "catalog.category", target = "catalogDto.categoryDto")
     BookDto toDto(Book book);
 
     List<Book> toEntityList(List<BookDto> bookDtoList);

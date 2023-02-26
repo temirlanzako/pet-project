@@ -37,7 +37,7 @@ public class JournalController {
     public Journal changeStatus(@PathVariable Long id) {
         return journalService.changeStatus(id);
     }
-/*
+    /*
     @PostMapping(value = "{id}/{bookid}")
     public boolean addRecord(@PathVariable Long id,
                              @PathVariable(name = "bookid") Long bookId) {

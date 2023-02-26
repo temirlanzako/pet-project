@@ -69,7 +69,11 @@ public class UserService {
             userBooks.add(book);
             user.setBookList(userBooks);
         }
-        userRepository.save(user);
+        if(user != null) {
+            userRepository.save(user);
+        } else {
+            System.err.println("In method addBookToUser, USER IS NULL");
+        }
         return true;
     }
     public boolean addBookToUserDto(Long id, Long bookId) {

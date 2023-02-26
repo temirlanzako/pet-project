@@ -11,6 +11,7 @@ import java.util.List;
 @Setter
 public class UserDto {
 
+    private Long id;
     private String nameDto;
     private String surname;
     private List<BookDto> bookList;
