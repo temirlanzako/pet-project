@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import pet_project.pet.dto.BookDto;
 import pet_project.pet.dto.UserDto;
 import pet_project.pet.model.Book;
+import pet_project.pet.model.Permission;
 import pet_project.pet.model.User;
 import pet_project.pet.service.UserService;
 
@@ -21,6 +22,7 @@ public class UserController {
     public List<UserDto> getUsers() {
         return userService.getAllUsersDto();
     }
+
     @GetMapping(value = "{id}")
     public List<BookDto> getUsersBooks(@PathVariable Long id) {
         return userService.getUserBooksDto(id);
@@ -31,9 +33,34 @@ public class UserController {
                                  @PathVariable(name = "bookid") Long bookId) {
         return userService.addBookToUserDto(id, bookId);
     }
+
     @PutMapping(value = "{id}/{bookid}")
-    public boolean deleteUserBook(@PathVariable Long id,
-                                  @PathVariable(name = "bookid") Long bookId) {
-        return userService.deleteUserBook(id, bookId);
+    public String deleteUserBook(@PathVariable Long id,
+                                 @PathVariable(name = "bookid") Long bookId) {
+        User user = userService.getUser(id);
+        List<Permission> permissionList = user.getPermissionList();
+        for (Permission per : permissionList) {
+            if (per.getName().equals("ROLE_ADMIN")) {
+                userService.deleteUserBook(id, bookId);
+                return "Book successfully deleted from Users list";
+            }
+        }
+        return "Sorry, but you don't have permission";
+    }
+
+
+    @PostMapping(value = "/addrole/{id}/{roleid}")
+    public String addRoleToUser(@PathVariable Long id,
+                                @PathVariable(name = "roleid") Long roleId) {
+        User user = userService.getUser(id);
+        List<Permission> permissionList = user.getPermissionList();
+        for (Permission per : permissionList) {
+            if (per.getName().equals("ROLE_ADMIN")) {
+                userService.addRoleToUser(id, roleId);
+                return "Role successfully assigned";
+            }
+        }
+        return "Sorry, but you don't have permission";
+
     }
 }

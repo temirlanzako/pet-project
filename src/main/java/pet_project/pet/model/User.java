@@ -1,8 +1,6 @@
 package pet_project.pet.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,4 +16,7 @@ public class User extends BaseEntity{
     private String surname;
     @OneToMany
     private List<Book> bookList;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<Permission> permissionList;
+
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 import pet_project.pet.model.Book;
+import pet_project.pet.model.Permission;
 
 import java.util.List;
 
@@ -15,4 +16,5 @@ public class UserDto {
     private String nameDto;
     private String surname;
     private List<BookDto> bookList;
+    private List<PermissionDto> permissionDtoList;
 }

@@ -56,7 +56,7 @@ public class JournalService {
         }
         return true;
     }
-    public Journal changeStatus(Long id) {
+    public void changeStatus(Long id) {
         Journal journal = journalRepository.findById(id).orElseThrow();
         if(journal.getStatus()==false) {
             journal.setStatus(true);
@@ -64,7 +64,6 @@ public class JournalService {
             journal.setStatus(false);
         }
         journalRepository.save(journal);
-        return journal;
     }
 }
 

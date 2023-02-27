@@ -3,10 +3,14 @@ package pet_project.pet.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pet_project.pet.dto.BookDto;
+import pet_project.pet.dto.PermissionDto;
 import pet_project.pet.dto.UserDto;
+import pet_project.pet.mapper.PermissionMapper;
 import pet_project.pet.mapper.UserMapper;
 import pet_project.pet.model.Book;
+import pet_project.pet.model.Permission;
 import pet_project.pet.model.User;
+import pet_project.pet.repository.PermissionRepository;
 import pet_project.pet.repository.UserRepository;
 
 import java.util.ArrayList;
@@ -20,7 +24,18 @@ public class UserService {
     private final BookService bookService;
 
     private final UserMapper userMapper;
+    private final PermissionMapper permissionMapper;
+    private final PermissionRepository permissionRepository;
 
+
+    public void getUserPermissionList() {
+        User user = userRepository.findById(1l).orElse(null);
+        List<Permission> permissionList = user.getPermissionList();
+        for(Permission per : permissionList) {
+            System.out.println(per.getName());
+        }
+
+    }
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -106,5 +121,31 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    // METHOD ADD ROLE TO USER IS NOT WORKING....
+    public void addRoleToUser(Long id, Long roleId) {
+        UserDto userDto = userMapper.toDto(userRepository.findById(id).orElse(null));
+        PermissionDto permissionDto = permissionMapper.toDto(permissionRepository.findById(roleId).orElse(null));
+        if(permissionDto==null) {
+            permissionDto.setName("ROLE_ADMIN");
+            permissionRepository.save(permissionMapper.toEntity(permissionDto));
+        }
+        if(userDto != null) {
+            List<PermissionDto> permissionDtoList = permissionMapper.toDtoList(permissionRepository.findAll());
+            if(permissionDtoList == null) {
+                List<PermissionDto> permissionDtoList1 = new ArrayList<>();
+                permissionDtoList1.add(permissionDto);
+                userDto.setPermissionDtoList(permissionDtoList1);
+            } else {
+                userDto.setPermissionDtoList(permissionDtoList);
+            }
+            userDto.setNameDto(userDto.getNameDto());
+            userDto.setBookList(userDto.getBookList());
+            userDto.setSurname(userDto.getSurname());
+            userRepository.save(userMapper.toEntity(userDto));
+        } else {
+            System.err.println("IN METHOD ADD ROLE TO USER, USER IS NULL");
+        }
     }
 }

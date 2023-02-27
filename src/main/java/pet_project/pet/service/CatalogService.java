@@ -29,4 +29,7 @@ public class CatalogService {
     public CatalogDto addCatalogDto(CatalogDto catalogDto) {
         return catalogMapper.toDto(catalogRepository.save(catalogMapper.toEntity(catalogDto)));
     }
+    public void deleteCatalog(Long id) {
+        catalogRepository.deleteById(id);
+    }
 }

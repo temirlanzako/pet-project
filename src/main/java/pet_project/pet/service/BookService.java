@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import pet_project.pet.dto.BookDto;
+import pet_project.pet.dto.CatalogDto;
 import pet_project.pet.mapper.BookMapper;
 import pet_project.pet.model.Book;
 import pet_project.pet.repository.BookRepository;
+import pet_project.pet.repository.CatalogRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,8 @@ import java.util.List;
 public class BookService {
 
     private final BookRepository bookRepository;
+
+    private final CatalogRepository catalogRepository;
 
 
     private final BookMapper bookMapper;

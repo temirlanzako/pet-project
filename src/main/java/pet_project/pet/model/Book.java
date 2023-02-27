@@ -1,10 +1,10 @@
 package pet_project.pet.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Entity
 @Getter
@@ -16,6 +16,7 @@ public class Book extends BaseEntity{
     private String author;
     private int price;
     @ManyToOne
+    @Cascade(CascadeType.ALL)
     private Catalog catalog;
 
 }
