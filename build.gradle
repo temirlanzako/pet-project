@@ -27,7 +27,16 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	implementation 'org.mapstruct:mapstruct:1.5.3.Final' //MAPSTRUCT MUST BE AFTER LOMBOK(BECAUSE MAPSTRUCT GONNA USE GETTER AND SETTER OF LOMBOK)
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+	// https://mvnrepository.com/artifact/commons-codec/commons-codec
+	implementation group: 'commons-codec', name: 'commons-codec', version: '1.15' //HASHCODE FOR PHOTOS ID "SHA1"
+	// https://mvnrepository.com/artifact/commons-io/commons-io
+	implementation group: 'commons-io', name: 'commons-io', version: '2.11.0' //FOR WORKING WITH FILES
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	// https://mvnrepository.com/artifact/javax.mail/javax.mail-api
+	implementation group: 'javax.mail', name: 'javax.mail-api', version: '1.6.2'
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.0.3'
+
 }
 
 tasks.named('test') {

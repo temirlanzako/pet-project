@@ -15,6 +15,7 @@ public class UserDto {
     private Long id;
     private String nameDto;
     private String surname;
+    private String email;
     private List<BookDto> bookList;
     private List<PermissionDto> permissionDtoList;
 }

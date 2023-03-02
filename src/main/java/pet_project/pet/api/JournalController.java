@@ -37,11 +37,12 @@ public class JournalController {
         return journalService.getRecord(id);
     }
 
-    @PostMapping(value = "{userId}/{id}/{bookId}")
+    @PostMapping(value = "{sessionid}{userId}/{id}/{bookId}")
     public String addBooksToRecord(@PathVariable Long id,
+                                    @PathVariable(name = "sessionid") Long sessionId,
                                     @PathVariable(name = "userId") Long userId,
                                     @PathVariable(name = "bookId") Long bookId) {
-        User user = userService.getUser(userId);
+        User user = userService.getUser(sessionId);
         List<Permission> permissionList = user.getPermissionList();
         for(Permission per : permissionList) {
             if(per.getName().equals("ROLE_STAFF")) {

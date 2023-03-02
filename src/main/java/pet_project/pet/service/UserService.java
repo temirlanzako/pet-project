@@ -15,6 +15,7 @@ import pet_project.pet.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +36,9 @@ public class UserService {
             System.out.println(per.getName());
         }
 
+    }
+    public User updateUser(User user) {
+        return userRepository.save(user);
     }
 
     public List<User> getAllUsers() {
@@ -107,7 +111,7 @@ public class UserService {
         return true;
     }
 
-    public boolean deleteUserBook(Long id, Long bookId) {
+    public void deleteUserBook(Long id, Long bookId) {
         List<Book> userBooks = getUserBooks(id);
         if (userBooks != null) {
             for (Book b : userBooks) {
@@ -118,9 +122,8 @@ public class UserService {
             User user = getUser(id);
             user.setBookList(userBooks);
             userRepository.save(user);
-            return true;
         }
-        return false;
+        System.err.println("NO SUCH BOOK OR USER");
     }
 
     // METHOD ADD ROLE TO USER IS NOT WORKING....
@@ -138,14 +141,16 @@ public class UserService {
                 permissionDtoList1.add(permissionDto);
                 userDto.setPermissionDtoList(permissionDtoList1);
             } else {
+                permissionDtoList.add(permissionDto);
                 userDto.setPermissionDtoList(permissionDtoList);
             }
             userDto.setNameDto(userDto.getNameDto());
             userDto.setBookList(userDto.getBookList());
             userDto.setSurname(userDto.getSurname());
-            userRepository.save(userMapper.toEntity(userDto));
+            User user = userRepository.save(userMapper.toEntity(userDto));
+            System.out.println(user);
         } else {
-            System.err.println("IN METHOD ADD ROLE TO USER, USER IS NULL");
+            System.err.println("IN METHOD ADD ROLE TO USER -> USER IS NULL");
         }
     }
 }

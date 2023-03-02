@@ -3,6 +3,7 @@ package pet_project.pet.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -10,13 +11,18 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@ToString
 public class User extends BaseEntity{
 
     private String name;
     private String surname;
-    @OneToMany
+    private String email;
+    @Column(name ="picture-url")
+    private String picture;
+    private byte[] realPicture;
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Book> bookList;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     private List<Permission> permissionList;
 
 }
