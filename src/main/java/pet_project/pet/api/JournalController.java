@@ -1,7 +1,9 @@
 package pet_project.pet.api;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
+import pet_project.pet.dto.JournalDto;
 import pet_project.pet.dto.PermissionDto;
 import pet_project.pet.mapper.PermissionMapper;
 import pet_project.pet.mapper.UserMapper;
@@ -13,6 +15,8 @@ import pet_project.pet.repository.UserRepository;
 import pet_project.pet.service.JournalService;
 import pet_project.pet.service.UserService;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -28,43 +32,35 @@ public class JournalController {
     private final PermissionMapper permissionMapper;
 
     @GetMapping
-    public List<Journal> getRecords() {
-        return journalService.getRecords();
+    public List<JournalDto> getRecords() {
+        return journalService.getDtoRecords();
     }
 
     @GetMapping(value = "{id}")
-    public Journal getOneRecord(@PathVariable Long id) {
-        return journalService.getRecord(id);
+    public JournalDto getOneRecord(@PathVariable Long id) {
+        return journalService.getDtoRecord(id);
     }
 
-    @PostMapping(value = "{sessionid}{userId}/{id}/{bookId}")
-    public String addBooksToRecord(@PathVariable Long id,
-                                    @PathVariable(name = "sessionid") Long sessionId,
+    @PostMapping(value = "{userId}/{journalid}/{bookId}")
+    public boolean addBooksToRecord(@PathVariable(name = "journalid")Long journalId,
                                     @PathVariable(name = "userId") Long userId,
                                     @PathVariable(name = "bookId") Long bookId) {
-        User user = userService.getUser(sessionId);
-        List<Permission> permissionList = user.getPermissionList();
-        for(Permission per : permissionList) {
-            if(per.getName().equals("ROLE_STAFF")) {
-                journalService.addRecord(userId, id, bookId);
-                return "Status of the record successfully changed";
-            }
-        }
-        return "Sorry, you dont have permission";
+                journalService.addDtoRecord(userId, journalId, bookId);
+                return true;
     }
 
     @PutMapping(value = "{userid}/{id}")
-    public String changeStatus(@PathVariable Long id,
+    public boolean changeStatus(@PathVariable Long id,
                                @PathVariable(name = "userid") Long userId) {
         User user = userService.getUser(userId);
         List<Permission> permissionList = user.getPermissionList();
         for(Permission per : permissionList) {
             if(per.getName().equals("ROLE_STAFF")) {
                 journalService.changeStatus(id);
-                return "Status of the record successfully changed";
+                return true;
             }
         }
-        return "Sorry, you dont have permission";
+        return false;
     }
 }
     /*

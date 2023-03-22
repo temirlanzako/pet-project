@@ -3,6 +3,7 @@ package pet_project.pet.dto;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import pet_project.pet.model.Book;
 import pet_project.pet.model.Permission;
 
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@ToString
 public class UserDto {
 
     private Long id;

@@ -22,7 +22,7 @@ public class User extends BaseEntity{
     private byte[] realPicture;
     @OneToMany(fetch = FetchType.EAGER)
     private List<Book> bookList;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Permission> permissionList;
 
 }

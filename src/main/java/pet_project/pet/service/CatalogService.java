@@ -15,10 +15,13 @@ public class CatalogService {
 
     private final CatalogMapper catalogMapper;
 
-    public Catalog getCatalog(Long id){
+    public Catalog getCatalog(Long id) {
+
         return catalogRepository.findById(id).orElseThrow();
     }
+
     public CatalogDto getCatalogDto(Long id) {
+
         CatalogDto catalogDto = catalogMapper.toDto(getCatalog(id));
         return catalogDto;
     }
@@ -26,10 +29,15 @@ public class CatalogService {
     public Catalog addCatalog(Catalog catalog) {
         return catalogRepository.save(catalog);
     }
+
     public CatalogDto addCatalogDto(CatalogDto catalogDto) {
-        return catalogMapper.toDto(catalogRepository.save(catalogMapper.toEntity(catalogDto)));
+
+        catalogDto = catalogMapper.toDto(addCatalog(catalogMapper.toEntity(catalogDto)));
+        return catalogDto;
     }
+
     public void deleteCatalog(Long id) {
+
         catalogRepository.deleteById(id);
     }
 }

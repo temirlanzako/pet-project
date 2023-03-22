@@ -28,22 +28,15 @@ public class UserService {
     private final PermissionMapper permissionMapper;
     private final PermissionRepository permissionRepository;
 
-
-    public void getUserPermissionList() {
-        User user = userRepository.findById(1l).orElse(null);
-        List<Permission> permissionList = user.getPermissionList();
-        for(Permission per : permissionList) {
-            System.out.println(per.getName());
-        }
-
+    public void updateUser(User user) {
+        userRepository.save(user);
     }
-    public User updateUser(User user) {
-        return userRepository.save(user);
-    }
+
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
+
     public List<UserDto> getAllUsersDto() {
         List<User> userList = getAllUsers();
         return userMapper.toDtoList(userList);
@@ -58,57 +51,65 @@ public class UserService {
     } //DTO
 
     public List<Book> getUserBooks(Long id) {
-        if(id == null) {
-            System.err.println("id == null");
-        }
         User user = getUser(id);
+        if (user == null) {
+            System.err.println("User is null");
+        }
         List<Book> userBooks = user.getBookList();
-        if(userBooks == null) {
+        if (userBooks == null) {
             System.err.println("User doesnt have any books");
         }
         return userBooks;
     }
-    public  List<BookDto> getUserBooksDto(Long id) {
+
+    public List<BookDto> getUserBooksDto(Long id) {
         UserDto userDto = getUserDto(id);
+        if (userDto == null) {
+            System.err.println("UserDto is null");
+        }
         List<BookDto> bookDtoList = userDto.getBookList();
-        if(bookDtoList == null) {
-            System.err.println("User doesnt have any books");
+        if (bookDtoList == null) {
+            System.err.println("UserDto doesnt have any booksDto");
         }
         return bookDtoList;
     } //DTO
+
     public boolean addBookToUser(Long id, Long bookId) {
         List<Book> userBooks = getUserBooks(id);
         User user = getUser(id);
-        Book book = bookService.getBook(bookId);
-        if (userBooks == null) {
-            List<Book> books = new ArrayList<>();
-            books.add(book);
-            user.setBookList(books);
-        } else {
-            userBooks.add(book);
-            user.setBookList(userBooks);
-        }
-        if(user != null) {
+        if (user != null) {
+            Book book = bookService.getBook(bookId);
+            if (userBooks == null) {
+                List<Book> books = new ArrayList<>();
+                books.add(book);
+                user.setBookList(books);
+            } else {
+                userBooks.add(book);
+                user.setBookList(userBooks);
+            }
             userRepository.save(user);
-        } else {
-            System.err.println("In method addBookToUser, USER IS NULL");
+            return true;
         }
-        return true;
+        return false;
     }
+
     public boolean addBookToUserDto(Long id, Long bookId) {
         List<BookDto> bookDtoList = getUserBooksDto(id);
         UserDto userDto = getUserDto(id);
-        BookDto bookDto = bookService.getOneBook(bookId);
-        if(bookDtoList == null) {
-            List<BookDto> booksDto = new ArrayList<>();
-            booksDto.add(bookDto);
-            userDto.setBookList(booksDto);
-        } else {
-            bookDtoList.add(bookDto);
-            userDto.setBookList(bookDtoList);
+        if (userDto != null) {
+            BookDto bookDto = bookService.getOneBook(bookId);
+            if (bookDtoList == null) {
+                List<BookDto> booksDto = new ArrayList<>();
+                booksDto.add(bookDto);
+                userDto.setBookList(booksDto);
+            } else {
+                bookDtoList.add(bookDto);
+                userDto.setBookList(bookDtoList);
+            }
+            userRepository.save(userMapper.toEntity(userDto));
+            return true;
         }
-        userRepository.save(userMapper.toEntity(userDto));
-        return true;
+        return false;
     }
 
     public void deleteUserBook(Long id, Long bookId) {
@@ -127,19 +128,19 @@ public class UserService {
     }
 
     // METHOD ADD ROLE TO USER IS NOT WORKING....
-    public void addRoleToUser(Long id, Long roleId) {
+    public boolean addRoleToUser(Long id, Long roleId) {
         UserDto userDto = userMapper.toDto(userRepository.findById(id).orElse(null));
         PermissionDto permissionDto = permissionMapper.toDto(permissionRepository.findById(roleId).orElse(null));
-        if(permissionDto==null) {
+        if (permissionDto == null) {
             permissionDto.setName("ROLE_ADMIN");
             permissionRepository.save(permissionMapper.toEntity(permissionDto));
         }
-        if(userDto != null) {
-            List<PermissionDto> permissionDtoList = permissionMapper.toDtoList(permissionRepository.findAll());
-            if(permissionDtoList == null) {
-                List<PermissionDto> permissionDtoList1 = new ArrayList<>();
-                permissionDtoList1.add(permissionDto);
-                userDto.setPermissionDtoList(permissionDtoList1);
+        if (userDto != null) {
+            List<PermissionDto> permissionDtoList = userDto.getPermissionDtoList();
+            if (permissionDtoList == null) {
+                List<PermissionDto> list = new ArrayList<>();
+                list.add(permissionDto);
+                userDto.setPermissionDtoList(list);
             } else {
                 permissionDtoList.add(permissionDto);
                 userDto.setPermissionDtoList(permissionDtoList);
@@ -147,10 +148,9 @@ public class UserService {
             userDto.setNameDto(userDto.getNameDto());
             userDto.setBookList(userDto.getBookList());
             userDto.setSurname(userDto.getSurname());
-            User user = userRepository.save(userMapper.toEntity(userDto));
-            System.out.println(user);
-        } else {
-            System.err.println("IN METHOD ADD ROLE TO USER -> USER IS NULL");
+            userRepository.save(userMapper.toEntity(userDto));
+            return true;
         }
+        return false;
     }
 }

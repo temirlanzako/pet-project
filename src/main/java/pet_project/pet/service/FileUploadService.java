@@ -33,7 +33,8 @@ public class FileUploadService {
                 User currentUser = userService.getUser(id);
                 currentUser.setPicture(fileName);
                 currentUser.setRealPicture(bytes);
-                return userService.updateUser(currentUser);
+                userService.updateUser(currentUser);
+                return currentUser;
             }
         } catch (Exception e) {
             e.printStackTrace();
